@@ -20,7 +20,7 @@ struct Bid
     Bid() = new(0, 0)
 end
 
-Base.:(>)(x::Bid, y::Bid) =    (y.number == 0 && y.value == 0) || (x.number > y.number) || (x.number == y.number && x.value > y.value)
+Base.:(>)(x::Bid, y::Bid) = (y.number == 0 && y.value == 0) || (x.number > y.number) || (x.number == y.number && x.value > y.value)
 Base.:(==)(x::Bid, y::Bid) = x.number == y.number && x.value == y.value
 
 # Game state
@@ -157,27 +157,3 @@ function strategy_human(v::View)
         return Bid(parse.(Int, split(input, ","))...)
     end
 end
-
-# Run game
-strategies = [strategy_human, strategy_basic, strategy_basic]
-winners = [
-    GameState(strategies; n_dice = 5, starting_player = mod(i, 1:length(strategies))) |> roll |> simulate for
-    i = 1:1
-]
-
-using Plots: bar
-
-bar(
-    [count(winners .== i) for i = 1:length(strategies)];
-    orientation = :h,
-    yticks = (1:length(strategies), 1:length(strategies)),
-    yflip = true
-)
-
-
-
-g = GameState(strategies; n_dice = 5, starting_player = 1) |> roll
-# simulate(g)
-action = g.players[g.turn].strategy(View(g, g.turn))
-g = action == Bid() ? doubt(g) : raise(g, action)
-getfield.(g.players, :n_dice)
