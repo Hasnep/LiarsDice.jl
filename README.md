@@ -2,7 +2,7 @@
 
 A WIP simulation of the game [Liar's Dice](https://en.wikipedia.org/wiki/Dudo), also known as Dudo or Perudo.
 
-To simulate 100 games where five of the same strategy play each other, run:
+To simulate 100 games where five AIs play each other, run:
 
 ```julia
 include("src/LiarsDice.jl")
@@ -12,7 +12,7 @@ winners = [
     i = 1:100
 ]
 
-# Plot number of wins
+# Plot the number of wins
 using Plots: bar
 bar(
     [count(winners .== i) for i = 1:length(strategies)];
@@ -22,10 +22,10 @@ bar(
 )
 ```
 
-To play a game against the basic strategy, run:
+To play a game against two AIs, run:
 
 ```julia
 include("src/LiarsDice.jl")
-strategies = [strategy_basic, strategy_basic, strategy_basic]
+strategies = [strategy_human, strategy_basic, strategy_basic]
 GameState(strategies; n_dice = 5, starting_player = 1) |> roll |> simulate
 ```
